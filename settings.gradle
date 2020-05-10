@@ -1,0 +1,2 @@
+include ':app', ':marvelservice'
+rootProject.name='MarvelApp'

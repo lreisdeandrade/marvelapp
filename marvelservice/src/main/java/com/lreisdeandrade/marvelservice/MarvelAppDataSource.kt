@@ -1,0 +1,3 @@
+package com.lreisdeandrade.marvelservice
+
+interface MarvelAppDataSource

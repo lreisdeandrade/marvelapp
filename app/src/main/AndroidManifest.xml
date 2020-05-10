@@ -21,7 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.lreisdeandrade.marvelapp.ui.characterdetail.CharacterDetailActivity" />
+        <activity
+            android:name="com.lreisdeandrade.marvelapp.ui.characterdetail.CharacterDetailActivity"
+            android:configChanges="orientation|screenSize" />
     </application>
 
 </manifest>

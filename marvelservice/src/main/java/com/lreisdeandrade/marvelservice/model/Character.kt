@@ -8,13 +8,13 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-//@Entity
+@Entity
 data class Character(
-//    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = true)
     @SerializedName("id")
     val id: Int = 0,
     @SerializedName("thumbnail")
-//    @Embedded(prefix = "character_thumbnail_")
+    @Embedded(prefix = "character_thumbnail_")
     val thumbnail: Thumbnail,
     @SerializedName("name")
     val name: String = "",

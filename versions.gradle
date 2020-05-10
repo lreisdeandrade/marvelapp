@@ -4,7 +4,7 @@ ext {
     lifecycleVersion = '1.1.1'
     constraintLayoutVersion = '1.1.2'
     supportLibraryVersion = '27.1.1'
-    roomVersion = '1.0.0'
+    roomVersion = '2.2.5'
     arch_comp_version = '1.1.1'
 
     //Square

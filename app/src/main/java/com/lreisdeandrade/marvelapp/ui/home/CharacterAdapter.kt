@@ -3,22 +3,26 @@ package com.lreisdeandrade.marvelapp.ui.home
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
+import com.lreisdeandrade.marvelapp.AppContext
 import com.lreisdeandrade.marvellapp.R
 import com.lreisdeandrade.marvelapp.ui.loadUrl
+import com.lreisdeandrade.marvelapp.util.SchedulerProvider
 import com.lreisdeandrade.marvelservice.model.Character
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.character_item.view.*
+import timber.log.Timber
 
 class CharacterAdapter(
     private val items: List<Character>,
-    private val listener: (Character, View) -> Unit) :
+    private val itemClicklistener: (Character, View) -> Unit
+) :
     RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
 
-//    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        holder.bind(items[position], clickListener)
-//    }
-override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) = holder.bind(items[position], listener)
-
+    override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) = holder.bind(
+        items[position], itemClicklistener
+    )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -31,11 +35,68 @@ override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) = hold
     }
 
 
-    class CharacterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: Character, clickListener: (Character, View) -> Unit) = with(itemView) {
+    class CharacterViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView) {
+        fun bind(
+            item: Character,
+            clickListener: (Character, View) -> Unit
+        ) = with(itemView) {
             characterName.text = item.name
             characterImage.loadUrl(item.thumbnail.path.plus(".".plus(item.thumbnail.extension)))
-            itemView.setOnClickListener { clickListener(item,characterImage) }
+            itemView.setOnClickListener { clickListener(item, characterImage) }
+
+            verifyIsFavorite(item, characterFavoriteButton)
+        }
+
+        private fun verifyIsFavorite(character: Character, button: Button) {
+            Observable.just(0)
+                .map { AppContext.instance.database.characterDao().findById(character.id) != null }
+                .subscribeOn(SchedulerProvider.io())
+                .observeOn(SchedulerProvider.ui())
+                .subscribe({
+                    it
+                    when (it) {
+                        true -> {
+                            button.setBackgroundResource(R.drawable.ic_favorite_filled)
+                            button.setOnClickListener {
+                                removeFavoriteCharacter(character, button)
+                            }
+                        }
+                        false -> {
+                            button.setBackgroundResource(R.drawable.ic_favorite)
+                            button.setOnClickListener {
+                                saveFavoriteCharacter(character, button)
+                            }
+                        }
+                    }
+                }, {
+                    Timber.e(it, "AdapterCheckFavoriteCharacter: %s", it.message)
+                })
+        }
+
+        //
+        private fun saveFavoriteCharacter(character: Character, button: Button) {
+            Observable.just(0)
+                .map { AppContext.instance.database.characterDao().insert(character) }
+                .subscribeOn(SchedulerProvider.io())
+                .observeOn(SchedulerProvider.ui())
+                .subscribe({
+                    button.setBackgroundResource(R.drawable.ic_favorite_filled)
+                }, {
+                    Timber.e(it, "AdapterSaveFavoriteCharacter: %s", it.message)
+                })
+        }
+
+        private fun removeFavoriteCharacter(character: Character, button: Button) {
+            Observable.just(0)
+                .map { AppContext.instance.database.characterDao().delete(character) }
+                .subscribeOn(SchedulerProvider.io())
+                .observeOn(SchedulerProvider.ui())
+                .subscribe({
+                    button.setBackgroundResource(R.drawable.ic_favorite)
+                }, {
+                    Timber.e(it, "AdapterDeleteFavoriteCharacter: %s", it.message)
+                })
         }
     }
 }

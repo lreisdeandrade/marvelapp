@@ -44,7 +44,7 @@ class AppContext : Application() {
 
 
     private fun initializeApiModules() {
-        MarvellModule.setRetrofit(MarvelApiEndPoint.PROD, LoggingInterceptor.Level.FULL)
+        MarvellModule.setRetrofit(MarvelApiEndPoint.DEVELOP, LoggingInterceptor.Level.FULL)
     }
 
     private fun initializeRoom() {

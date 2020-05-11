@@ -57,6 +57,7 @@ class HomeFragment : Fragment() {
         if (!hasLoaded) {
             initViewModel()
         }
+        charactersRecycler.adapter?.notifyDataSetChanged()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

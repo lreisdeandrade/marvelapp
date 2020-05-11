@@ -5,82 +5,88 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.lreisdeandrade.marvelapp.AppContext
+import com.lreisdeandrade.marvelapp.ui.characterdetail.CharacterDetailActivity
+import com.lreisdeandrade.marvelapp.ui.gone
+import com.lreisdeandrade.marvelapp.ui.obtainViewModel
+import com.lreisdeandrade.marvelapp.ui.visible
 import com.lreisdeandrade.marvellapp.R
 import com.lreisdeandrade.marvelservice.model.Character
+import kotlinx.android.synthetic.main.fragment_favorite.*
+import kotlinx.android.synthetic.main.fragment_home.*
 
 class FavoriteFragment : Fragment() {
 
-    //    private lateinit var viewModel: GenreViewModel
-    private lateinit var characters: List<Character>
-//    private lateinit var moviesAdapter: MoviesByGenreAdapter
+    private lateinit var viewModel: FavoriteViewModel
 
     companion object {
         fun newInstance(): FavoriteFragment {
-            val fragment = FavoriteFragment()
-//            fragment.arguments = Bundle().apply {
-//                putSerializable("teste", characters)
-//            }
-            return fragment
+            return FavoriteFragment()
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_favorite, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initData()
         initViews()
         initViewModel()
+
     }
 
-    private fun initData() {
-
-//        arguments?.getSerializable("teste")?.let {
-//            characters = it
-//        } ?: run {
-//            activity?.requiredBundleNotFound(EXTRA_GENRE)
-//        }
+    override fun onResume() {
+        super.onResume()
+        viewModel.getAllFavoritesCharacters()
     }
 
     private fun initViewModel() {
-//        viewModel = obtainViewModel(AppContext.instance, GenreViewModel::class.java)
-//
-//        with(viewModel) {
-//            hasErrorLive.observe(this@GenreFragment, Observer {
-//                when (it) {
-//                    true -> {
-//
-//                    }
-//                }
-//            })
-//
-//            moviesByGenreLive.observe(this@GenreFragment, Observer {
-//                it?.let {
-//                    setupMoviesByGenreAdapter(it)
-//                }
-//            })
-//        }
-//
-//        viewModel.loadMoviesByGenre(genre.id)
+        viewModel = obtainViewModel(AppContext.instance, FavoriteViewModel::class.java)
+        with(viewModel) {
+            isLoadingLive.observe(viewLifecycleOwner, Observer {
+                it?.let {
+                    if (it) {
+                        favoriteFragmentLoading.visible()
+                    } else {
+                        favoriteFragmentLoading.gone()
+                    }
+                }
+            })
+
+            listFavoritesLive.observe(viewLifecycleOwner, Observer {
+                setupFavoriteListCharacter(it)
+            })
+        }
     }
 
-//    private fun setupMoviesByGenreAdapter(movieByGenreResponse: MovieByGenreResponse) {
+    private fun setupFavoriteListCharacter(it: ArrayList<Character>) {
+        val linearLayoutManager = GridLayoutManager(context, 3)
+        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+        favoriteCharactersRecycler.layoutManager = linearLayoutManager
+        favoriteCharactersRecycler.isNestedScrollingEnabled = false
 
-//        moviesRecycler.setHasFixedSize(true)
-//        val linearLayoutManager = LinearLayoutManager(context)
-//        linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-//        moviesRecycler.layoutManager = linearLayoutManager
-//        moviesRecycler.isNestedScrollingEnabled = false
-//
-//        moviesRecycler.adapter = MoviesByGenreAdapter(movieByGenreResponse.results, {
-//
-//            MovieActivity.createIntent(activity as Context, it.id)
-//        })
-//    }
+        it?.let {
+            favoriteCharactersRecycler.adapter =
+                FavoriteAdapter(it) { character, view ->
+                    context?.let { context ->
+                        CharacterDetailActivity.createIntent(
+                            context,
+                            character,
+                            view
+                        )
+                    }
+                }
+        }
+    }
 
     private fun initViews() {
-//        genreName.text = genre.name
     }
 }

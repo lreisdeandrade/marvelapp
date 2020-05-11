@@ -8,11 +8,23 @@ import com.lreisdeandrade.marvelapp.ui.replaceFragmentInActivity
 import com.lreisdeandrade.marvelapp.ui.setupActionBar
 import kotlinx.android.synthetic.main.activity_home.*
 
+private const val TAB_SELECTED = "tabselected"
+
 class HomeActivity : AppCompatActivity() {
+
+    private var currentSelectItemId = R.id.action_home
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        if (savedInstanceState != null) {
+            currentSelectItemId = savedInstanceState.getInt(TAB_SELECTED)
+            changeFragment(currentSelectItemId)
+        } else {
+            openHomeFragment()
+        }
+
         setupActionBar(R.id.toolbar) {
             setDisplayHomeAsUpEnabled(false)
         }
@@ -21,23 +33,29 @@ class HomeActivity : AppCompatActivity() {
             changeFragment(it.itemId)
             return@setOnNavigationItemSelectedListener true
         }
-        openHomeFragment()
     }
 
     private fun openHomeFragment() {
         val homeId = "home"
+        currentSelectItemId = R.id.action_home
         var fragment: HomeFragment? =
             supportFragmentManager.findFragmentByTag(homeId) as HomeFragment?
         if (fragment == null) {
-            // Create the fragment
             fragment = HomeFragment.newInstance()
             replaceFragmentInActivity(fragment, R.id.contentFrame, homeId)
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(TAB_SELECTED, currentSelectItemId)
+    }
+
     private fun openFavoriteFragment() {
         val favoriteId = "favoriteId"
-        var fragment: FavoriteFragment? = supportFragmentManager.findFragmentByTag(favoriteId) as FavoriteFragment?
+        currentSelectItemId = R.id.action_favorites
+        var fragment: FavoriteFragment? =
+            supportFragmentManager.findFragmentByTag(favoriteId) as FavoriteFragment?
         if (fragment == null) {
             // Create the fragment
             fragment =

@@ -108,10 +108,6 @@ class HomeFragment : Fragment() {
         charactersRecycler.isNestedScrollingEnabled = false
 
         characterList?.let {
-//            charactersRecycler.adapter = CharacterAdapter(it) {
-//
-//            }
-
             charactersRecycler.adapter =
                 CharacterAdapter(it) { character, view ->
                     context?.let { context ->

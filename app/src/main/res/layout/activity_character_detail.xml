@@ -52,10 +52,6 @@
 
     <include layout="@layout/content_character_detail" />
 
-    <!--    <include-->
-    <!--        android:id="@+id/characterDetailLoadingView"-->
-    <!--        layout="@layout/loading_view" />-->
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabFavorite"
         android:layout_width="wrap_content"

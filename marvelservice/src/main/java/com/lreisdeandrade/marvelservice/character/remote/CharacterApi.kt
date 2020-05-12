@@ -14,8 +14,8 @@ object CharacterApi : CharacterDataSource {
             CharacterService::class.java)
     }
 
-    override fun fetchCharacterList(): Single<CharacterResponse> {
-        return marvellService.fetchCharacterList()
+    override fun fetchCharacterList(offset : Int): Single<CharacterResponse> {
+        return marvellService.fetchCharacterList(offset)
             .doOnError { Timber.e(it, "fetchCharacterList: %s", it.message) }
     }
 }

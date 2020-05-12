@@ -1,21 +1,21 @@
 package com.lreisdeandrade.marvelapp.ui.home
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lreisdeandrade.marvelapp.AppContext
-import com.lreisdeandrade.marvellapp.R
-import com.lreisdeandrade.marvelapp.ui.characterdetail.CharacterDetailActivity
 import com.lreisdeandrade.marvelapp.ui.gone
 import com.lreisdeandrade.marvelapp.ui.obtainViewModel
 import com.lreisdeandrade.marvelapp.ui.visible
 import com.lreisdeandrade.marvelservice.model.Character
 import kotlinx.android.synthetic.main.fragment_home.*
 import timber.log.Timber
+import android.view.*
+import androidx.appcompat.widget.SearchView
+import androidx.recyclerview.widget.RecyclerView
+import com.lreisdeandrade.marvelapp.ui.characterdetail.CharacterDetailActivity
+import com.lreisdeandrade.marvellapp.R
 
 private const val HAS_LOADED = "hasLoaded"
 private const val CHARACTERS_RESULT = "charactersResult"
@@ -23,8 +23,10 @@ private const val CHARACTERS_RESULT = "charactersResult"
 class HomeFragment : Fragment() {
 
     private lateinit var viewModel: HomeViewModel
-    private var characters: ArrayList<Character>? = null
+    private var charactersList: ArrayList<Character>? = null
+    private var characterAdapter: CharacterAdapter? = null
     private var hasLoaded = false
+    private var offset = 0
 
     companion object {
         fun newInstance(): HomeFragment {
@@ -32,10 +34,10 @@ class HomeFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
@@ -45,8 +47,8 @@ class HomeFragment : Fragment() {
             hasLoaded = savedInstanceState.getBoolean(HAS_LOADED, false)
             when (hasLoaded) {
                 true -> {
-                    characters = savedInstanceState.getParcelableArrayList(CHARACTERS_RESULT)
-                    characters?.let { setupRecycler(it) }
+                    charactersList = savedInstanceState.getParcelableArrayList(CHARACTERS_RESULT)
+                    charactersList?.let { setupRecycler(it) }
                 }
             }
         }
@@ -62,7 +64,7 @@ class HomeFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelableArrayList(CHARACTERS_RESULT, characters)
+        outState.putParcelableArrayList(CHARACTERS_RESULT, charactersList)
         outState.putBoolean(HAS_LOADED, hasLoaded)
     }
 
@@ -88,37 +90,100 @@ class HomeFragment : Fragment() {
                 }
             })
 
-            characterLive.observe(viewLifecycleOwner, Observer {
+            fetchCharacterLive.observe(viewLifecycleOwner, Observer {
                 it?.let {
                     it.characterDataContainer.results?.let { characterList ->
-                        setupRecycler(characterList)
+                        charactersRecycler.adapter?.let {
+                            (it as CharacterAdapter).add(characterList)
+                        } ?: run {
+                            hasLoaded = true
+                            setupRecycler(characterList)
+                        }
+
                         hasLoaded = true
                     }
                     Timber.d(it.toString())
                 }
             })
+
+            characterSearchLive.observe(viewLifecycleOwner, Observer {
+                it?.let {
+                    characterAdapter?.filterList(it)
+                }
+            })
         }
-        viewModel.loadCharactersList()
+        viewModel.loadCharactersList(offset)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.character_list_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem.actionView as SearchView
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                viewModel.filterCharacter(newText, charactersList)
+                return false
+            }
+        })
     }
 
     private fun setupRecycler(characterList: ArrayList<Character>?) {
-        this.characters = characterList
+        this.charactersList = characterList
         val linearLayoutManager = LinearLayoutManager(context)
+        charactersRecycler.layoutManager = linearLayoutManager
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         charactersRecycler.layoutManager = linearLayoutManager
-        charactersRecycler.isNestedScrollingEnabled = false
 
         characterList?.let {
-            charactersRecycler.adapter =
-                CharacterAdapter(it) { character, view ->
-                    context?.let { context ->
-                        CharacterDetailActivity.createIntent(
-                            context,
-                            character,
-                            view
-                        )
+            characterAdapter = CharacterAdapter(it) { character, view ->
+                context?.let { context ->
+                    CharacterDetailActivity.createIntent(
+                        context,
+                        character,
+                        view
+                    )
+                }
+            }
+            charactersRecycler.adapter = characterAdapter
+        }
+
+        charactersRecycler.addOnScrolledToEnd {
+            offset = it
+            viewModel.loadCharactersList(offset)
+        }
+    }
+
+    private fun RecyclerView.addOnScrolledToEnd(onScrolledToEnd: (Int) -> Unit) {
+        this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            private val VISIBLE_THRESHOLD = 5
+
+            private var loading = true
+            private var previousTotal = 0
+            private var page = 0
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                with(layoutManager as LinearLayoutManager) {
+                    val visibleItemCount = childCount
+                    val totalItemCount = itemCount
+                    val firstVisibleItem = findFirstVisibleItemPosition()
+                    if (loading && totalItemCount > previousTotal) {
+                        loading = false
+                        previousTotal = totalItemCount
+                    }
+                    if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + VISIBLE_THRESHOLD)) {
+                        page += 20
+                        onScrolledToEnd(page)
+                        loading = true
                     }
                 }
-        }
+            }
+        })
     }
 }

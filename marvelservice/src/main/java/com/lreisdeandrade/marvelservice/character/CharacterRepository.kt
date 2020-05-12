@@ -6,7 +6,7 @@ import io.reactivex.Single
 
 class CharacterRepository(private val characterDataSource: CharacterDataSource) :
     CharacterDataSource {
-    override fun fetchCharacterList(): Single<CharacterResponse> {
-        return characterDataSource.fetchCharacterList()
+    override fun fetchCharacterList(offSet : Int): Single<CharacterResponse> {
+        return characterDataSource.fetchCharacterList(offSet)
     }
 }

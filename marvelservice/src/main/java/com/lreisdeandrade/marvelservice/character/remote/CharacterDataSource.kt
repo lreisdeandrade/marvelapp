@@ -4,5 +4,5 @@ import com.lreisdeandrade.marvelservice.model.CharacterResponse
 import io.reactivex.Single
 
 interface CharacterDataSource {
-    fun fetchCharacterList(): Single<CharacterResponse>
+    fun fetchCharacterList(offSet : Int): Single<CharacterResponse>
 }

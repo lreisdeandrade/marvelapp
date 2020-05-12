@@ -32,7 +32,7 @@
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/marvel_teste_teste" />
+                    android:src="@drawable/character_detail_backdrop" />
 
                 <View
                     android:layout_width="match_parent"

@@ -10,8 +10,8 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-internal const val PUBLIC_KEY = "YOUR-PUBLIC-KEY"
-internal const val PRIVATE_KEY = "YOUR-PRIVATE-KEY"
+internal const val PUBLIC_KEY = "8505a155c66a8d185240640ab157be41"
+internal const val PRIVATE_KEY = "9dda3d974c57ee4a40f7c75b0d6f395ec61cf9b9"
 internal const val TIME_STAMP_KEY = "ts"
 internal const val HASH_KEY = "hash"
 internal const val API_KEY = "apikey"
@@ -20,8 +20,9 @@ object MarvellModule {
     lateinit var retrofit: Retrofit private set
     private var timeStamp = System.currentTimeMillis().toString()
 
-    fun setRetrofit(moviedbEndpoint: MarvelApiEndPoint,
-                    logLevel: LoggingInterceptor.Level = LoggingInterceptor.Level.FULL
+    fun setRetrofit(
+        moviedbEndpoint: MarvelApiEndPoint,
+        logLevel: LoggingInterceptor.Level = LoggingInterceptor.Level.FULL
     ) {
         val builder = OkHttpClient.Builder()
         val loggingInterceptor =
@@ -30,18 +31,10 @@ object MarvellModule {
         builder.addInterceptor { chain ->
             val original = chain.request()
             val url = original.url().newBuilder()
-                .addQueryParameter(
-                    TIME_STAMP_KEY,
-                    timeStamp
-                )
-                .addQueryParameter(
-                    API_KEY,
-                    PUBLIC_KEY
-                )
-                .addQueryParameter(
-                    HASH_KEY,
-                    generateHash()
-                )
+                .addQueryParameter(TIME_STAMP_KEY, timeStamp)
+                .addQueryParameter(API_KEY, PUBLIC_KEY)
+                .addQueryParameter(HASH_KEY, generateHash())
+                .addQueryParameter("limit", "20")
                 .build()
 
             val requestBuilder = original.newBuilder().url(url)

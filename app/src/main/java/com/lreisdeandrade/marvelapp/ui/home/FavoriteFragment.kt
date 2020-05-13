@@ -67,10 +67,10 @@ class FavoriteFragment : Fragment() {
             isEmptyListLive.observe(viewLifecycleOwner, Observer {
                 if (it) {
                     favoriteCharactersRecycler.gone()
-                    favoriteEmptyInfo.visible()
+                    errorView.visible()
                 } else {
                     favoriteCharactersRecycler.visible()
-                    favoriteEmptyInfo.gone()
+                    errorView.gone()
                     setupFavoriteListCharacter(favoriteList)
                 }
             })

@@ -6,12 +6,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.snackbar.Snackbar
 import com.lreisdeandrade.marvellapp.R
 
 fun ImageView.loadUrl(url: String) {
     Glide.with(context).applyDefaultRequestOptions(RequestOptions().placeholder(R.drawable.avengers_place_holder))
         .load(url).into(this)
 
+}
+
+fun View.showSnackBar(message: String, duration: Int, actionText: String, actionAction: () -> Unit) {
+    Snackbar.make(this, message, duration)
+        .setAction(actionText, { actionAction() })
+        .show()
 }
 
 fun View.visible() {

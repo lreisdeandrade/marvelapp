@@ -13,7 +13,9 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import timber.log.Timber
 import android.view.*
 import androidx.appcompat.widget.SearchView
+import com.google.android.material.snackbar.Snackbar
 import com.lreisdeandrade.marvelapp.ui.characterdetail.CharacterDetailActivity
+import com.lreisdeandrade.marvelapp.ui.showSnackBar
 import com.lreisdeandrade.marvelapp.util.PaginationScrollListener
 import com.lreisdeandrade.marvellapp.R
 
@@ -31,8 +33,8 @@ class HomeFragment : Fragment() {
     private var currentPage = 0
     private var isLoading = false
 
-    var searchView : SearchView?=null
-    var query : String = ""
+    var searchView: SearchView? = null
+    var query: String = ""
 
     companion object {
         fun newInstance(): HomeFragment {
@@ -40,8 +42,10 @@ class HomeFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
@@ -80,12 +84,15 @@ class HomeFragment : Fragment() {
             hasErrorLive.observe(viewLifecycleOwner, Observer {
                 when (it) {
                     true -> {
-
+                        view?.showSnackBar("Erro", Snackbar.LENGTH_LONG,
+                            getString(R.string.try_again)
+                        ) { viewModel.loadCharactersList(currentPage) }
                     }
                 }
             })
 
-            isLoadingLive.observe(viewLifecycleOwner, Observer {
+            isLoadingLive.observe(viewLifecycleOwner, Observer
+            {
                 it?.let {
                     if (it) {
                         homeFragmentLoading.visible()
@@ -94,7 +101,8 @@ class HomeFragment : Fragment() {
                     }
                 }
             })
-            isBottomLoadingLive.observe(viewLifecycleOwner, Observer {
+            isBottomLoadingLive.observe(viewLifecycleOwner, Observer
+            {
                 it?.let {
                     if (it) {
                         homeBottomLoading.visible()
@@ -104,7 +112,8 @@ class HomeFragment : Fragment() {
                 }
             })
 
-            fetchCharacterLive.observe(viewLifecycleOwner, Observer {
+            fetchCharacterLive.observe(viewLifecycleOwner, Observer
+            {
                 it?.let {
                     it.characterDataContainer.results?.let { characterList ->
                         charactersRecycler.adapter?.let {
@@ -120,9 +129,26 @@ class HomeFragment : Fragment() {
                 }
             })
 
-            characterSearchLive.observe(viewLifecycleOwner, Observer {
+            characterSearchLive.observe(viewLifecycleOwner, Observer
+            {
                 it?.let {
                     characterAdapter?.filterList(it)
+                }
+            })
+
+            hasErrorLive.observe(viewLifecycleOwner, Observer
+            {
+                when (it) {
+                    true -> view?.showSnackBar(getString(R.string.generic_error), Snackbar.LENGTH_INDEFINITE,
+                        getString(R.string.try_again)
+                    ) { viewModel.loadCharactersList(currentPage) }
+                }
+            })
+            hasErrorNoDataLive.observe(viewLifecycleOwner, Observer
+            {
+                when (it) {
+                    true -> errorView?.visible()
+                    false -> errorView?.gone()
                 }
             })
         }
@@ -169,7 +195,8 @@ class HomeFragment : Fragment() {
             charactersRecycler.adapter = characterAdapter
         }
 
-        charactersRecycler.addOnScrollListener(object : PaginationScrollListener(linearLayoutManager) {
+        charactersRecycler.addOnScrollListener(object :
+            PaginationScrollListener(linearLayoutManager) {
 
             override fun getTotalPageCount(): Int {
                 return ITEMS_PER_PAGE

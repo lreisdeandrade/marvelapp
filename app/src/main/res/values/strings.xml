@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MarvelApp</string>
+    <string name="try_again">Tentar novamente</string>
+    <string name="generic_error">Ocorreu um erro.</string>
+
+    <string name="view_empty_favorite_disclaimer">Favorite personagens para visualizá-los nesta aba.</string>
 </resources>

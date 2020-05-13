@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+    <include
+        android:id="@+id/errorView"
+        layout="@layout/error_view"
+        android:visibility="gone"/>
+
     <fr.castorflex.android.circularprogressbar.CircularProgressBar
         android:id="@+id/homeFragmentLoading"
         android:layout_width="@dimen/circular_progress_bar_size"

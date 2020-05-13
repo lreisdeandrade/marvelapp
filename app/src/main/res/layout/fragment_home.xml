@@ -26,7 +26,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/charactersRecycler"
         android:layout_width="match_parent"

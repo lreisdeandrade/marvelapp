@@ -17,7 +17,6 @@ class AppContext : Application() {
         lateinit var instance: AppContext private set
 
     }
-
     override fun onCreate() {
         super.onCreate()
         instance = this
@@ -41,7 +40,6 @@ class AppContext : Application() {
     private fun initializeTimezone() {
         AndroidThreeTen.init(this)
     }
-
 
     private fun initializeApiModules() {
         MarvellModule.setRetrofit(MarvelApiEndPoint.DEVELOP, LoggingInterceptor.Level.FULL)

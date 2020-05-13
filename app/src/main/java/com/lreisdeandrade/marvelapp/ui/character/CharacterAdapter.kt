@@ -1,4 +1,4 @@
-package com.lreisdeandrade.marvelapp.ui.home
+package com.lreisdeandrade.marvelapp.ui.character
 
 import android.view.LayoutInflater
 import android.view.View
@@ -55,7 +55,10 @@ class CharacterAdapter(
             characterImage.loadUrl(item.thumbnail.path.plus(".".plus(item.thumbnail.extension)))
             itemView.setOnClickListener { clickListener(item, characterImage) }
 
-            verifyIsFavorite(item, characterFavoriteButton)
+            verifyIsFavorite(
+                item,
+                characterFavoriteButton
+            )
         }
     }
 }

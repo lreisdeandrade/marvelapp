@@ -6,16 +6,12 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.lreisdeandrade.marvelapp.ui.characterdetail.DetailViewModel
-import com.lreisdeandrade.marvelapp.ui.home.FavoriteViewModel
-import com.lreisdeandrade.marvelapp.ui.home.HomeViewModel
+import com.lreisdeandrade.marvelapp.ui.favorite.FavoriteViewModel
+import com.lreisdeandrade.marvelapp.ui.character.HomeViewModel
 import com.lreisdeandrade.marvelapp.util.SchedulerProvider
 
 class ViewModelFactory private constructor(private val application: AppContext) :
     ViewModelProvider.NewInstanceFactory() {
-
-//    init {
-//        DaggerInjector.getApplicationComponent().inject(this)
-//    }
 
     override fun <T /**/ : ViewModel> create(modelClass: Class<T>) =
         with(modelClass) {
@@ -32,7 +28,11 @@ class ViewModelFactory private constructor(private val application: AppContext) 
                     DetailViewModel(application, application.database, SchedulerProvider)
                 }
                 isAssignableFrom(FavoriteViewModel::class.java) -> {
-                    FavoriteViewModel(application, application.database, SchedulerProvider)
+                    FavoriteViewModel(
+                        application,
+                        application.database,
+                        SchedulerProvider
+                    )
                 }
 
                 else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

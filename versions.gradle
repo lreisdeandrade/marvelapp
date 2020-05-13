@@ -1,11 +1,18 @@
 ext {
+    kotlinVersion = '1.3.50'
+
     //GOOGLE
     appcompat_version = '27.1.1'
-    lifecycleVersion = '1.1.1'
-    constraintLayoutVersion = '1.1.2'
+    lifecycleVersion = '2.2.0'
     supportLibraryVersion = '27.1.1'
     roomVersion = '2.2.5'
     arch_comp_version = '1.1.1'
+    androidXVersion = '1.1.0'
+    constraintLayoutVersion = '1.1.3'
+    androidKTX = '1.2.0'
+    androidNavigationVersion = '2.2.2'
+    materialDesignVersion = '1.1.0'
+    vectorDrawableVersion = '1.1.0'
 
     //Square
     retrofitVersion = '2.3.0'
@@ -22,7 +29,7 @@ ext {
     // Material Drawer
     materialDrawerVersion = "6.0.8"
 
-    timberVersion = '4.7.0'
+    timberVersion = '4.7.1'
 
     //Calendar and Time
     timeZoneVersion = "1.1.0"
@@ -30,17 +37,18 @@ ext {
 
     circularProgressView = "1.3.0"
 
-    anko_version = '0.10.3'
-    rx_java_version = '2.1.14'
-    rx_android_version = '2.0.2'
+    ankoVersion = '0.10.3'
+    rxJavaVersion = '2.1.14'
+    rxAndroidVersion = '2.1.0'
 
     //Tests
     junitVersion = '4.12'
+    junitExtVersion = '1.1.1'
     mockitoVersion = '2.7.22'
     powerMockito = '1.6.2'
     hamcrestVersion = '1.3'
     runnerVersion = '1.0.0'
     rulesVersion = '1.0.0'
-    espressoVersion = '3.0.2'
+    espressoVersion = '3.2.0'
     testngVersion = '6.9.6'
 }

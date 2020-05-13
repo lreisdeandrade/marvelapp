@@ -1,4 +1,4 @@
-package com.lreisdeandrade.marvelapp.ui.home
+package com.lreisdeandrade.marvelapp.ui.favorite
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData

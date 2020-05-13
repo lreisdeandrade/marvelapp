@@ -1,4 +1,4 @@
-package com.lreisdeandrade.marvelapp.ui.home
+package com.lreisdeandrade.marvelapp.ui.favorite
 
 import android.view.LayoutInflater
 import android.view.View

@@ -1,4 +1,4 @@
-package com.lreisdeandrade.marvelapp.ui.home
+package com.lreisdeandrade.marvelapp.ui.character
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,7 +10,6 @@ import com.lreisdeandrade.marvelapp.ui.obtainViewModel
 import com.lreisdeandrade.marvelapp.ui.visible
 import com.lreisdeandrade.marvelservice.model.Character
 import kotlinx.android.synthetic.main.fragment_home.*
-import timber.log.Timber
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import com.google.android.material.snackbar.Snackbar
@@ -18,23 +17,21 @@ import com.lreisdeandrade.marvelapp.ui.characterdetail.CharacterDetailActivity
 import com.lreisdeandrade.marvelapp.ui.showSnackBar
 import com.lreisdeandrade.marvelapp.util.PaginationScrollListener
 import com.lreisdeandrade.marvellapp.R
+import com.lreisdeandrade.marvelservice.ITEMS_PER_PAGE
 
 private const val HAS_LOADED = "hasLoaded"
 private const val CHARACTERS_RESULT = "charactersResult"
-const val ITEMS_PER_PAGE = 20
 
 class HomeFragment : Fragment() {
 
     private lateinit var viewModel: HomeViewModel
+
     private var charactersList: ArrayList<Character>? = null
     private var characterAdapter: CharacterAdapter? = null
     private var hasLoaded = false
-    private var offset = 0
     private var currentPage = 0
     private var isLoading = false
-
-    var searchView: SearchView? = null
-    var query: String = ""
+    private var searchView: SearchView? = null
 
     companion object {
         fun newInstance(): HomeFragment {
@@ -63,6 +60,25 @@ class HomeFragment : Fragment() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.character_list_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+
+        val searchItem = menu.findItem(R.id.action_search)
+        searchView = searchItem.actionView as SearchView
+
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                viewModel.filterCharacter(newText, charactersList)
+                return false
+            }
+        })
+    }
+
     override fun onResume() {
         super.onResume()
         if (!hasLoaded) {
@@ -84,7 +100,8 @@ class HomeFragment : Fragment() {
             hasErrorLive.observe(viewLifecycleOwner, Observer {
                 when (it) {
                     true -> {
-                        view?.showSnackBar("Erro", Snackbar.LENGTH_LONG,
+                        view?.showSnackBar(
+                            getString(R.string.generic_error), Snackbar.LENGTH_LONG,
                             getString(R.string.try_again)
                         ) { viewModel.loadCharactersList(currentPage) }
                     }
@@ -114,34 +131,27 @@ class HomeFragment : Fragment() {
 
             fetchCharacterLive.observe(viewLifecycleOwner, Observer
             {
-                it?.let {
-                    it.characterDataContainer.results?.let { characterList ->
-                        charactersRecycler.adapter?.let {
-                            (it as CharacterAdapter).add(characterList)
-                        } ?: run {
-                            hasLoaded = true
-                            setupRecycler(characterList)
-                        }
-                        isLoading = false
+                it?.let { characterList ->
+                    charactersRecycler.adapter?.let {
+                        (it as CharacterAdapter).add(characterList)
+                    } ?: run {
                         hasLoaded = true
+                        setupRecycler(characterList)
                     }
-                    Timber.d(it.toString())
+                    isLoading = false
+                    hasLoaded = true
                 }
             })
 
             characterSearchLive.observe(viewLifecycleOwner, Observer
             {
-                it?.let {
-                    characterAdapter?.filterList(it)
-                }
+                it?.let { characterAdapter?.filterList(it) }
             })
 
             hasErrorLive.observe(viewLifecycleOwner, Observer
             {
-                when (it) {
-                    true -> view?.showSnackBar(getString(R.string.generic_error), Snackbar.LENGTH_INDEFINITE,
-                        getString(R.string.try_again)
-                    ) { viewModel.loadCharactersList(currentPage) }
+                if (it) {
+                    showSnackbarError()
                 }
             })
             hasErrorNoDataLive.observe(viewLifecycleOwner, Observer
@@ -152,27 +162,14 @@ class HomeFragment : Fragment() {
                 }
             })
         }
-        viewModel.loadCharactersList(offset)
+        viewModel.loadCharactersList(currentPage)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.character_list_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-
-        val searchItem = menu.findItem(R.id.action_search)
-        searchView = searchItem.actionView as SearchView
-
-        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                query = newText
-                viewModel.filterCharacter(query, charactersList)
-                return false
-            }
-        })
+    private fun showSnackbarError() {
+        view?.showSnackBar(
+            getString(R.string.generic_error), Snackbar.LENGTH_LONG,
+            getString(R.string.try_again)
+        ) { viewModel.loadCharactersList(currentPage) }
     }
 
     private fun setupRecycler(characterList: ArrayList<Character>?) {
@@ -183,15 +180,16 @@ class HomeFragment : Fragment() {
         charactersRecycler.layoutManager = linearLayoutManager
 
         characterList?.let {
-            characterAdapter = CharacterAdapter(it) { character, view ->
-                context?.let { context ->
-                    CharacterDetailActivity.createIntent(
-                        context,
-                        character,
-                        view
-                    )
+            characterAdapter =
+                CharacterAdapter(it) { character, view ->
+                    context?.let { context ->
+                        CharacterDetailActivity.createIntent(
+                            context,
+                            character,
+                            view
+                        )
+                    }
                 }
-            }
             charactersRecycler.adapter = characterAdapter
         }
 
@@ -204,7 +202,7 @@ class HomeFragment : Fragment() {
 
             override fun loadMoreItems() {
                 isLoading = true
-                currentPage += 20
+                currentPage += ITEMS_PER_PAGE
                 viewModel.loadCharactersList(currentPage)
             }
 

@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.lreisdeandrade.marvelapp.ViewModelFactory
 import timber.log.Timber
 
@@ -52,7 +52,7 @@ fun Activity.requiredBundleNotFound(bundleNotFoundName: String) {
 }
 
 fun <T : ViewModel> AppCompatActivity.obtainViewModel(application: Application, viewModelClass: Class<T>) =
-    ViewModelProviders.of(this, ViewModelFactory.getInstance(application)).get(viewModelClass)
+    ViewModelProvider(this, ViewModelFactory.getInstance(application)).get(viewModelClass)
 
 /**
  * Runs a FragmentTransaction, then calls commit().

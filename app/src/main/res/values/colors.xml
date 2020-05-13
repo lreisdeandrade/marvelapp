@@ -2,14 +2,13 @@
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-
-    <color name="white">#FFFFFF</color>
+    <color name="colorAccent">#99FFFFFF</color>
 
     <color name="loading_color1">#489DBE</color>
     <color name="loading_color2">#7E170E</color>
     <color name="loading_color3">#D25327</color>
     <color name="loading_color4">#2E3267</color>
+    <color name="dark_gray">#424242</color>
 
     <integer-array name="loading_colors">
         <item>@color/loading_color1</item>

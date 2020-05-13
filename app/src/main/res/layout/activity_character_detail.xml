@@ -60,7 +60,6 @@
         android:scaleType="fitXY"
         android:src="@drawable/ic_favorite"
         app:backgroundTint="@color/colorPrimaryDark"
-        app:borderWidth="0dp"
         app:layout_anchor="@id/appBar"
         app:layout_anchorGravity="bottom|end"
         app:useCompatPadding="true" />

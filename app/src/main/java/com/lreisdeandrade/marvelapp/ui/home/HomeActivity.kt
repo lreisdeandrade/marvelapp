@@ -3,6 +3,8 @@ package com.lreisdeandrade.marvelapp.ui.home
 import android.os.Bundle
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
+import com.lreisdeandrade.marvelapp.ui.character.HomeFragment
+import com.lreisdeandrade.marvelapp.ui.favorite.FavoriteFragment
 import com.lreisdeandrade.marvellapp.R
 import com.lreisdeandrade.marvelapp.ui.replaceFragmentInActivity
 import com.lreisdeandrade.marvelapp.ui.setupActionBar
@@ -36,7 +38,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun openHomeFragment() {
-        val homeId = "home"
+        val homeId = getString(R.string.characterFragmentId)
         currentSelectItemId = R.id.action_home
         var fragment: HomeFragment? =
             supportFragmentManager.findFragmentByTag(homeId) as HomeFragment?
@@ -52,7 +54,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun openFavoriteFragment() {
-        val favoriteId = "favoriteId"
+        val favoriteId = getString(R.string.favoriteFragmentId)
         currentSelectItemId = R.id.action_favorites
         var fragment: FavoriteFragment? =
             supportFragmentManager.findFragmentByTag(favoriteId) as FavoriteFragment?
@@ -62,7 +64,6 @@ class HomeActivity : AppCompatActivity() {
                 FavoriteFragment.newInstance()
             replaceFragmentInActivity(fragment, R.id.contentFrame, favoriteId)
         }
-//        FavoritePresenter(AppContext.instance.database, fragment, SchedulerProvider)
     }
 
     private fun changeFragment(@IdRes itemId: Int) {

@@ -13,12 +13,13 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import timber.log.Timber
 import android.view.*
 import androidx.appcompat.widget.SearchView
-import androidx.recyclerview.widget.RecyclerView
 import com.lreisdeandrade.marvelapp.ui.characterdetail.CharacterDetailActivity
+import com.lreisdeandrade.marvelapp.util.PaginationScrollListener
 import com.lreisdeandrade.marvellapp.R
 
 private const val HAS_LOADED = "hasLoaded"
 private const val CHARACTERS_RESULT = "charactersResult"
+const val ITEMS_PER_PAGE = 20
 
 class HomeFragment : Fragment() {
 
@@ -27,6 +28,11 @@ class HomeFragment : Fragment() {
     private var characterAdapter: CharacterAdapter? = null
     private var hasLoaded = false
     private var offset = 0
+    private var currentPage = 0
+    private var isLoading = false
+
+    var searchView : SearchView?=null
+    var query : String = ""
 
     companion object {
         fun newInstance(): HomeFragment {
@@ -36,7 +42,6 @@ class HomeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
@@ -89,6 +94,15 @@ class HomeFragment : Fragment() {
                     }
                 }
             })
+            isBottomLoadingLive.observe(viewLifecycleOwner, Observer {
+                it?.let {
+                    if (it) {
+                        homeBottomLoading.visible()
+                    } else {
+                        homeBottomLoading.gone()
+                    }
+                }
+            })
 
             fetchCharacterLive.observe(viewLifecycleOwner, Observer {
                 it?.let {
@@ -99,7 +113,7 @@ class HomeFragment : Fragment() {
                             hasLoaded = true
                             setupRecycler(characterList)
                         }
-
+                        isLoading = false
                         hasLoaded = true
                     }
                     Timber.d(it.toString())
@@ -120,15 +134,16 @@ class HomeFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
 
         val searchItem = menu.findItem(R.id.action_search)
-        val searchView = searchItem.actionView as SearchView
+        searchView = searchItem.actionView as SearchView
 
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 return false
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                viewModel.filterCharacter(newText, charactersList)
+                query = newText
+                viewModel.filterCharacter(query, charactersList)
                 return false
             }
         })
@@ -154,35 +169,20 @@ class HomeFragment : Fragment() {
             charactersRecycler.adapter = characterAdapter
         }
 
-        charactersRecycler.addOnScrolledToEnd {
-            offset = it
-            viewModel.loadCharactersList(offset)
-        }
-    }
+        charactersRecycler.addOnScrollListener(object : PaginationScrollListener(linearLayoutManager) {
 
-    private fun RecyclerView.addOnScrolledToEnd(onScrolledToEnd: (Int) -> Unit) {
-        this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            private val VISIBLE_THRESHOLD = 5
+            override fun getTotalPageCount(): Int {
+                return ITEMS_PER_PAGE
+            }
 
-            private var loading = true
-            private var previousTotal = 0
-            private var page = 0
+            override fun loadMoreItems() {
+                isLoading = true
+                currentPage += 20
+                viewModel.loadCharactersList(currentPage)
+            }
 
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                with(layoutManager as LinearLayoutManager) {
-                    val visibleItemCount = childCount
-                    val totalItemCount = itemCount
-                    val firstVisibleItem = findFirstVisibleItemPosition()
-                    if (loading && totalItemCount > previousTotal) {
-                        loading = false
-                        previousTotal = totalItemCount
-                    }
-                    if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + VISIBLE_THRESHOLD)) {
-                        page += 20
-                        onScrolledToEnd(page)
-                        loading = true
-                    }
-                }
+            override fun isLoading(): Boolean {
+                return isLoading
             }
         })
     }

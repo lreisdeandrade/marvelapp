@@ -16,11 +16,11 @@ import com.lreisdeandrade.marvelapp.ui.visible
 import com.lreisdeandrade.marvellapp.R
 import com.lreisdeandrade.marvelservice.model.Character
 import kotlinx.android.synthetic.main.fragment_favorite.*
-import kotlinx.android.synthetic.main.fragment_home.*
 
 class FavoriteFragment : Fragment() {
 
     private lateinit var viewModel: FavoriteViewModel
+    private lateinit var favoriteList: ArrayList<Character>
 
     companion object {
         fun newInstance(): FavoriteFragment {
@@ -38,9 +38,7 @@ class FavoriteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViews()
         initViewModel()
-
     }
 
     override fun onResume() {
@@ -62,7 +60,19 @@ class FavoriteFragment : Fragment() {
             })
 
             listFavoritesLive.observe(viewLifecycleOwner, Observer {
-                setupFavoriteListCharacter(it)
+                favoriteList = it
+                isEmptyListLive(it)
+            })
+
+            isEmptyListLive.observe(viewLifecycleOwner, Observer {
+                if (it) {
+                    favoriteCharactersRecycler.gone()
+                    favoriteEmptyInfo.visible()
+                } else {
+                    favoriteCharactersRecycler.visible()
+                    favoriteEmptyInfo.gone()
+                    setupFavoriteListCharacter(favoriteList)
+                }
             })
         }
     }
@@ -85,8 +95,5 @@ class FavoriteFragment : Fragment() {
                     }
                 }
         }
-    }
-
-    private fun initViews() {
     }
 }

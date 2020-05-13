@@ -31,4 +31,12 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/favoriteEmptyInfo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Favorite personagens para visualiza-los nesta aba."
+        android:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,7 +18,7 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        ic_splash.loadGif()
+        icSplash.loadGif()
         Handler().postDelayed(
             {
                 val i = Intent(this, HomeActivity::class.java)

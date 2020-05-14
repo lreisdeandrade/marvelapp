@@ -6,7 +6,7 @@
     android:layout_marginTop="@dimen/spacing_large">
 
     <ImageView
-        android:id="@+id/ic_error"
+        android:id="@+id/icError"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginBottom="130dp"
@@ -23,5 +23,5 @@
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ic_error" />
+        app:layout_constraintTop_toBottomOf="@+id/icError" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true">
 
     <ImageView
-        android:id="@+id/ic_splash"
+        android:id="@+id/icSplash"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"

@@ -3,6 +3,7 @@ package com.lreisdeandrade.marvelservice
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+
 import com.lreisdeandrade.marvelservice.util.toMd5
 import okhttp3.OkHttpClient
 import org.threeten.bp.Clock
@@ -53,14 +54,14 @@ object MarvellModule {
             .build()
     }
 
-    private fun gsonBuilder(): Gson {
+    fun gsonBuilder(): Gson {
         return GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
             .setPrettyPrinting()
             .create()
     }
 
-    private fun generateHash(): String {
+    fun generateHash(): String {
         return (timeStamp + PRIVATE_KEY + PUBLIC_KEY).toMd5()
     }
 }

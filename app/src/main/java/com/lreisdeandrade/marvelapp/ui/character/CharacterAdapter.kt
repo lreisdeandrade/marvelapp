@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lreisdeandrade.marvelapp.AppContext
 import com.lreisdeandrade.marvellapp.R
 import com.lreisdeandrade.marvelapp.ui.loadUrl
-import com.lreisdeandrade.marvelapp.util.SchedulerProvider
+import com.lreisdeandrade.marvelapp.util.scheduler.SchedulerProvider
 import com.lreisdeandrade.marvelservice.model.Character
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.character_item.view.*

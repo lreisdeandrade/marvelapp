@@ -3,7 +3,7 @@ package com.lreisdeandrade.marvelapp.ui.characterdetail
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.lreisdeandrade.marvelapp.base.BaseViewModel
-import com.lreisdeandrade.marvelapp.util.BaseSchedulerProvider
+import com.lreisdeandrade.marvelapp.util.scheduler.BaseSchedulerProvider
 import com.lreisdeandrade.marvelservice.dao.CharacterDataBase
 import com.lreisdeandrade.marvelservice.model.Character
 import io.reactivex.Observable

@@ -1,4 +1,4 @@
-package com.lreisdeandrade.marvelapp.util
+package com.lreisdeandrade.marvelapp.util.scheduler
 
 import io.reactivex.Scheduler
 

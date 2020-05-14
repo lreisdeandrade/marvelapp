@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.lreisdeandrade.marvelapp.ui.characterdetail.DetailViewModel
 import com.lreisdeandrade.marvelapp.ui.favorite.FavoriteViewModel
 import com.lreisdeandrade.marvelapp.ui.character.HomeViewModel
-import com.lreisdeandrade.marvelapp.util.SchedulerProvider
+import com.lreisdeandrade.marvelapp.util.scheduler.SchedulerProvider
 
 class ViewModelFactory private constructor(private val application: AppContext) :
     ViewModelProvider.NewInstanceFactory() {
@@ -25,7 +25,9 @@ class ViewModelFactory private constructor(private val application: AppContext) 
                     )
                 }
                 isAssignableFrom(DetailViewModel::class.java) -> {
-                    DetailViewModel(application, application.database, SchedulerProvider)
+                    DetailViewModel(application, application.database,
+                        SchedulerProvider
+                    )
                 }
                 isAssignableFrom(FavoriteViewModel::class.java) -> {
                     FavoriteViewModel(

@@ -74,4 +74,15 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:${junitExtVersion}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${espressoVersion}"
 
+    //GsonConverter
+    implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
+
+
+    testImplementation "org.mockito:mockito-core:$rootProject.ext.mockitoVersion"
+    testImplementation "org.hamcrest:hamcrest-all:$rootProject.ext.hamcrestVersion"
+    testImplementation "android.arch.core:core-testing:$arch_comp_version"
+
+    androidTestImplementation "com.android.support.test:runner:$rootProject.ext.runnerVersion"
+    androidTestImplementation "com.android.support.test:rules:$rootProject.ext.rulesVersion"
+
 }

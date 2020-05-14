@@ -1,9 +1,10 @@
 package com.lreisdeandrade.marvelapp.ui.favorite
 
 import android.app.Application
+import android.os.Handler
 import androidx.lifecycle.MutableLiveData
 import com.lreisdeandrade.marvelapp.base.BaseViewModel
-import com.lreisdeandrade.marvelapp.util.BaseSchedulerProvider
+import com.lreisdeandrade.marvelapp.util.scheduler.BaseSchedulerProvider
 import com.lreisdeandrade.marvelservice.dao.CharacterDataBase
 import com.lreisdeandrade.marvelservice.model.Character
 import io.reactivex.Observable
@@ -19,22 +20,31 @@ internal class FavoriteViewModel(
     internal val isEmptyListLive: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getAllFavoritesCharacters() {
+        isLoadingLive.postValue(true)
         Observable.just(0)
             .map { database.characterDao().getAll() }
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
-            .subscribe({ listFavoritesLive.postValue(it as ArrayList<Character>)}, {
-                Timber.e(it, "listFavoriteCharacters: %s", it.message)
+            .doOnTerminate {
+                isLoadingLive.postValue(false)
+            }
+            .subscribe({
+                listFavoritesLive.postValue(it as ArrayList<Character>)
+            }
+                , {
+                    Timber.e(it, "listFavoriteCharacters: %s", it.message)
 //                view.saveFavoriteError()
-            })
+                })
     }
 
-    fun isEmptyListLive(favoriteItems: ArrayList<Character>){
+    fun isEmptyListLive(favoriteItems: ArrayList<Character>) {
         Observable.just(0)
-            .map {favoriteItems.isEmpty()}
+            .map { favoriteItems.isEmpty() }
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
-            .subscribe({ isEmptyListLive.postValue(it)}, {
+            .subscribe({
+                isEmptyListLive.postValue(it)
+            }, {
                 Timber.e(it, "verifyEmptyList: %s", it.message)
 //                view.saveFavoriteError()
             })

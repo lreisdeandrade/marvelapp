@@ -133,10 +133,11 @@ class HomeFragment : Fragment() {
             {
                 it?.let { characterList ->
                     charactersRecycler.adapter?.let {
-                        (it as CharacterAdapter).add(characterList)
+
+                        (it as CharacterAdapter).add(characterList.characterDataContainer.results!!)
                     } ?: run {
                         hasLoaded = true
-                        setupRecycler(characterList)
+                        setupRecycler(characterList.characterDataContainer.results!!)
                     }
                     isLoading = false
                     hasLoaded = true

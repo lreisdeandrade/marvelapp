@@ -6,11 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.lreisdeandrade.marvelapp.ui.character.HomeFragment
 import com.lreisdeandrade.marvelapp.ui.favorite.FavoriteFragment
 import com.lreisdeandrade.marvellapp.R
-import com.lreisdeandrade.marvelapp.ui.replaceFragmentInActivity
-import com.lreisdeandrade.marvelapp.ui.setupActionBar
+import com.lreisdeandrade.marvelapp.util.ui.extension.replaceFragmentInActivity
+import com.lreisdeandrade.marvelapp.util.ui.extension.setupActionBar
+import com.lreisdeandrade.marvelapp.util.Constants.CHARACTER_FAVORITE_ID
+import com.lreisdeandrade.marvelapp.util.Constants.CHARACTER_FRAMENT_ID
+import com.lreisdeandrade.marvelapp.util.Constants.TAB_SELECTED
 import kotlinx.android.synthetic.main.activity_home.*
-
-private const val TAB_SELECTED = "tabselected"
 
 class HomeActivity : AppCompatActivity() {
 
@@ -38,7 +39,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun openHomeFragment() {
-        val homeId = getString(R.string.characterFragmentId)
+        val homeId = CHARACTER_FRAMENT_ID
         currentSelectItemId = R.id.action_home
         var fragment: HomeFragment? =
             supportFragmentManager.findFragmentByTag(homeId) as HomeFragment?
@@ -54,7 +55,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun openFavoriteFragment() {
-        val favoriteId = getString(R.string.favoriteFragmentId)
+        val favoriteId = CHARACTER_FAVORITE_ID
         currentSelectItemId = R.id.action_favorites
         var fragment: FavoriteFragment? =
             supportFragmentManager.findFragmentByTag(favoriteId) as FavoriteFragment?
@@ -72,9 +73,4 @@ class HomeActivity : AppCompatActivity() {
             R.id.action_favorites -> openFavoriteFragment()
         }
     }
-
-//    @VisibleForTesting
-//    fun getCountingIdlingResource(): IdlingResource {
-//        return EspressoIdlingResource.idlingResource
-//    }
 }

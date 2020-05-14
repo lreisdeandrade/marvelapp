@@ -13,16 +13,19 @@ import androidx.lifecycle.Observer
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.lreisdeandrade.marvelapp.AppContext
-import com.lreisdeandrade.marvellapp.R
-import com.lreisdeandrade.marvelapp.ui.loadUrl
-import com.lreisdeandrade.marvelapp.ui.obtainViewModel
-import com.lreisdeandrade.marvelapp.ui.requiredBundleNotFound
+import com.lreisdeandrade.marvelapp.util.ui.extension.obtainViewModel
+import com.lreisdeandrade.marvelapp.util.ui.extension.requiredBundleNotFound
+import com.lreisdeandrade.marvelapp.util.Constants.BUNDLE_EXTRA_CHARACTER
+import com.lreisdeandrade.marvelapp.util.Constants.CHARACTER_IMAGE_TRANSITION
 import com.lreisdeandrade.marvelservice.model.Character
 import kotlinx.android.synthetic.main.activity_character_detail.*
 import kotlinx.android.synthetic.main.content_character_detail.*
 import org.jetbrains.anko.intentFor
-
-private const val EXTRA_CHARACTER = "character"
+import com.bumptech.glide.Glide
+import com.lreisdeandrade.marvelapp.util.Constants.DOT
+import com.lreisdeandrade.marvelapp.util.ui.extension.loadGif
+import com.lreisdeandrade.marvelapp.util.ui.extension.loadUrl
+import com.lreisdeandrade.marvellapp.R
 
 class CharacterDetailActivity : AppCompatActivity() {
 
@@ -38,11 +41,11 @@ class CharacterDetailActivity : AppCompatActivity() {
         fun createIntent(context: Context, character: Character, transitionView: View) {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 context as Activity, transitionView,
-                "character_image_transition"
+                CHARACTER_IMAGE_TRANSITION
             )
             context.startActivity(
                 context.intentFor<CharacterDetailActivity>()
-                    .putExtra(EXTRA_CHARACTER, character), options.toBundle()
+                    .putExtra(BUNDLE_EXTRA_CHARACTER, character), options.toBundle()
             )
         }
     }
@@ -78,10 +81,10 @@ class CharacterDetailActivity : AppCompatActivity() {
 
     private fun initData() {
         with(intent) {
-            getParcelableExtra<Character>(EXTRA_CHARACTER)?.let {
+            getParcelableExtra<Character>(BUNDLE_EXTRA_CHARACTER)?.let {
                 character = it
             } ?: run {
-                requiredBundleNotFound(EXTRA_CHARACTER)
+                requiredBundleNotFound(BUNDLE_EXTRA_CHARACTER)
             }
         }
     }
@@ -165,10 +168,11 @@ class CharacterDetailActivity : AppCompatActivity() {
 
     private fun setupCharacterScreen() {
         with(character) {
-            characterDetailImage.loadUrl(thumbnail.path.plus(".".plus(thumbnail.extension)))
+            characterDetailImage.loadUrl(thumbnail.path.plus(DOT.plus(thumbnail.extension)))
             collapsingToolbar.title = character.name
             if (description.isBlank()) {
-                characterDescription.text = "No description available."
+                characterDescription.text =
+                    getString(R.string.character_detail_no_description_available)
             } else {
                 characterDescription.text = character.description
             }

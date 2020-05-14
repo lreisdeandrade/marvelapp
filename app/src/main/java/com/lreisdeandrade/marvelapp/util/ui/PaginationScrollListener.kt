@@ -1,4 +1,4 @@
-package com.lreisdeandrade.marvelapp.util
+package com.lreisdeandrade.marvelapp.util.ui
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView

@@ -7,7 +7,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <include
-        android:id="@+id/errorView"
+        android:id="@+id/emptyView"
         layout="@layout/error_view"
         android:visibility="gone"/>
 

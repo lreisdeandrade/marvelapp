@@ -5,22 +5,22 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lreisdeandrade.marvelapp.AppContext
-import com.lreisdeandrade.marvelapp.ui.gone
-import com.lreisdeandrade.marvelapp.ui.obtainViewModel
-import com.lreisdeandrade.marvelapp.ui.visible
+import com.lreisdeandrade.marvelapp.util.ui.extension.gone
+import com.lreisdeandrade.marvelapp.util.ui.extension.obtainViewModel
+import com.lreisdeandrade.marvelapp.util.ui.extension.visible
 import com.lreisdeandrade.marvelservice.model.Character
 import kotlinx.android.synthetic.main.fragment_home.*
 import android.view.*
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import com.google.android.material.snackbar.Snackbar
 import com.lreisdeandrade.marvelapp.ui.characterdetail.CharacterDetailActivity
-import com.lreisdeandrade.marvelapp.ui.showSnackBar
-import com.lreisdeandrade.marvelapp.util.PaginationScrollListener
+import com.lreisdeandrade.marvelapp.util.ui.extension.showSnackBar
+import com.lreisdeandrade.marvelapp.util.ui.PaginationScrollListener
 import com.lreisdeandrade.marvellapp.R
 import com.lreisdeandrade.marvelservice.ITEMS_PER_PAGE
-
-private const val HAS_LOADED = "hasLoaded"
-private const val CHARACTERS_RESULT = "charactersResult"
+import org.jetbrains.anko.sdk25.coroutines.onClick
 
 class HomeFragment : Fragment() {
 
@@ -50,14 +50,15 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (savedInstanceState != null) {
-            hasLoaded = savedInstanceState.getBoolean(HAS_LOADED, false)
-            when (hasLoaded) {
-                true -> {
-                    charactersList = savedInstanceState.getParcelableArrayList(CHARACTERS_RESULT)
-                    charactersList?.let { setupRecycler(it) }
-                }
-            }
+//            hasLoaded = savedInstanceState.getBoolean(HAS_LOADED, false)
+//            when (hasLoaded) {
+//                true -> {
+//                    charactersList = savedInstanceState.getParcelableArrayList(CHARACTERS_RESULT)
+//                    charactersList?.let { setupRecycler(it) }
+//                }
+//            }
         }
+        initViewModel()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -66,7 +67,14 @@ class HomeFragment : Fragment() {
 
         val searchItem = menu.findItem(R.id.action_search)
         searchView = searchItem.actionView as SearchView
+        val closeButton = searchView?.findViewById(R.id.search_close_btn) as ImageView
 
+        closeButton.setOnClickListener {
+            viewModel.filterCharacter("", charactersList)
+            searchView?.onActionViewCollapsed()
+            searchItem.collapseActionView()
+
+        }
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 return false
@@ -81,17 +89,17 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (!hasLoaded) {
-            initViewModel()
-        }
+//        if (!hasLoaded) {
+//        initViewModel()
+//        }
         charactersRecycler.adapter?.notifyDataSetChanged()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putParcelableArrayList(CHARACTERS_RESULT, charactersList)
-        outState.putBoolean(HAS_LOADED, hasLoaded)
-    }
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        super.onSaveInstanceState(outState)
+//        outState.putParcelableArrayList(CHARACTERS_RESULT, charactersList)
+//        outState.putBoolean(HAS_LOADED, hasLoaded)
+//    }
 
     private fun initViewModel() {
         viewModel = obtainViewModel(AppContext.instance, HomeViewModel::class.java)
@@ -158,8 +166,8 @@ class HomeFragment : Fragment() {
             hasErrorNoDataLive.observe(viewLifecycleOwner, Observer
             {
                 when (it) {
-                    true -> errorView?.visible()
-                    false -> errorView?.gone()
+                    true -> emptyView?.visible()
+                    false -> emptyView?.gone()
                 }
             })
         }

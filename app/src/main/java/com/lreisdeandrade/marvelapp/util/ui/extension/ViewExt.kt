@@ -1,4 +1,4 @@
-package com.lreisdeandrade.marvelapp.ui
+package com.lreisdeandrade.marvelapp.util.ui.extension
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +10,14 @@ import com.google.android.material.snackbar.Snackbar
 import com.lreisdeandrade.marvellapp.R
 
 fun ImageView.loadUrl(url: String) {
-    Glide.with(context).applyDefaultRequestOptions(RequestOptions().placeholder(R.drawable.avengers_place_holder))
+    Glide.with(context).applyDefaultRequestOptions(RequestOptions()
+        .placeholder(R.drawable.avengers_place_holder))
         .load(url).into(this)
-
 }
+fun ImageView.loadGif() {
+    Glide.with(context).load(R.raw.marvel).into(this)
+}
+
 
 fun View.showSnackBar(message: String, duration: Int, actionText: String, actionAction: () -> Unit) {
     Snackbar.make(this, message, duration)

@@ -59,7 +59,7 @@
         android:layout_margin="10dp"
         android:scaleType="fitXY"
         android:src="@drawable/ic_favorite"
-        app:backgroundTint="@color/colorPrimaryDark"
+        app:backgroundTint="@color/colorPrimary"
         app:layout_anchor="@id/appBar"
         app:layout_anchorGravity="bottom|end"
         app:useCompatPadding="true" />

@@ -12,7 +12,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 internal const val PUBLIC_KEY = "YOUR-PUBLIC-KEY"
-internal const val PRIVATE_KEY = "YOUR-PRIVATE-KEY"
+internal const val PRIVATE_KEY = "YOUR-PRIVATE-kEY"
 internal const val TIME_STAMP_KEY = "ts"
 internal const val HASH_KEY = "hash"
 internal const val API_KEY = "apikey"
@@ -24,7 +24,7 @@ object MarvellModule {
     private var timeStamp = System.currentTimeMillis().toString()
 
     fun setRetrofit(
-        moviedbEndpoint: MarvelApiEndPoint,
+        marveldbEndpoint: MarvelApiEndPoint,
         logLevel: LoggingInterceptor.Level = LoggingInterceptor.Level.FULL
     ) {
         val builder = OkHttpClient.Builder()
@@ -47,7 +47,7 @@ object MarvellModule {
         }
         val okClient = builder.build()
         retrofit = Retrofit.Builder()
-            .baseUrl(moviedbEndpoint.url)
+            .baseUrl(marveldbEndpoint.url)
             .client(okClient)
             .addConverterFactory(GsonConverterFactory.create(gsonBuilder()))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

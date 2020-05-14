@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lreisdeandrade.marvelapp.AppContext
 import com.lreisdeandrade.marvelapp.ui.characterdetail.CharacterDetailActivity
-import com.lreisdeandrade.marvelapp.ui.gone
-import com.lreisdeandrade.marvelapp.ui.obtainViewModel
-import com.lreisdeandrade.marvelapp.ui.visible
+import com.lreisdeandrade.marvelapp.util.ui.extension.gone
+import com.lreisdeandrade.marvelapp.util.ui.extension.obtainViewModel
+import com.lreisdeandrade.marvelapp.util.ui.extension.visible
 import com.lreisdeandrade.marvellapp.R
 import com.lreisdeandrade.marvelservice.model.Character
 import kotlinx.android.synthetic.main.fragment_favorite.*
@@ -67,10 +67,10 @@ class FavoriteFragment : Fragment() {
             isEmptyListLive.observe(viewLifecycleOwner, Observer {
                 if (it) {
                     favoriteCharactersRecycler.gone()
-                    errorView.visible()
+                    emptyView.visible()
                 } else {
                     favoriteCharactersRecycler.visible()
-                    errorView.gone()
+                    emptyView.gone()
                     setupFavoriteListCharacter(favoriteList)
                 }
             })

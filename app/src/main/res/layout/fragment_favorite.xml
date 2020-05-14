@@ -33,7 +33,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <include
-        android:id="@+id/errorView"
+        android:id="@+id/emptyView"
         layout="@layout/empty_favorite_view"
         android:visibility="gone"
         tools:visibility="visible"/>

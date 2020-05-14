@@ -1,4 +1,4 @@
-package com.lreisdeandrade.marvelapp.ui
+package com.lreisdeandrade.marvelapp.util.ui.extension
 
 import android.app.Activity
 import android.app.Application

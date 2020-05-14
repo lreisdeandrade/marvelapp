@@ -7,7 +7,9 @@ import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.lreisdeandrade.marvelapp.AppContext
 import com.lreisdeandrade.marvellapp.R
-import com.lreisdeandrade.marvelapp.ui.loadUrl
+import com.lreisdeandrade.marvelapp.util.ui.extension.loadUrl
+import com.lreisdeandrade.marvelapp.util.Constants.CHARACTER_FAVORITE_TAG
+import com.lreisdeandrade.marvelapp.util.Constants.CHARACTER_UNFAVORITE_TAG
 import com.lreisdeandrade.marvelapp.util.scheduler.SchedulerProvider
 import com.lreisdeandrade.marvelservice.model.Character
 import io.reactivex.Observable
@@ -16,12 +18,12 @@ import timber.log.Timber
 
 class CharacterAdapter(
     private var items: MutableList<Character>,
-    private val itemClicklistener: (Character, View) -> Unit
+    private val itemListener: (Character, View) -> Unit
 ) :
     RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) = holder.bind(
-        items[position], itemClicklistener
+        items[position], itemListener
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
@@ -39,10 +41,10 @@ class CharacterAdapter(
         notifyDataSetChanged()
     }
 
-    internal fun add(gists: ArrayList<Character>) {
+    internal fun add(characters: ArrayList<Character>) {
         val adapterSize = items.size
-        items.addAll(gists)
-        notifyItemRangeInserted(adapterSize, gists.size)
+        items.addAll(characters)
+        notifyItemRangeInserted(adapterSize, characters.size)
     }
 
     class CharacterViewHolder(itemView: View) :
@@ -72,11 +74,11 @@ fun verifyIsFavorite(character: Character, button: Button) {
             it
             when (it) {
                 true -> {
-                    button.tag = "favorite"
+                    button.tag = CHARACTER_FAVORITE_TAG
                     button.setBackgroundResource(R.drawable.ic_favorite_filled)
                 }
                 false -> {
-                    button.tag = "notFavorite"
+                    button.tag = CHARACTER_UNFAVORITE_TAG
                     button.setBackgroundResource(R.drawable.ic_favorite)
                 }
             }
@@ -89,12 +91,12 @@ fun verifyIsFavorite(character: Character, button: Button) {
 }
 
 private fun doFavoriteAction(character: Character, button: Button) {
-    if (button.tag == "favorite") {
+    if (button.tag == CHARACTER_FAVORITE_TAG) {
         removeFavoriteCharacter(character, button)
-        button.tag = "notFavorite"
+        button.tag = CHARACTER_UNFAVORITE_TAG
     } else {
         saveFavoriteCharacter(character, button)
-        button.tag = "favorite"
+        button.tag = CHARACTER_FAVORITE_TAG
     }
 }
 

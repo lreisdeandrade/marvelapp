@@ -3,6 +3,7 @@ package com.lreisdeandrade.marvelapp
 import android.app.Application
 import androidx.room.Room
 import com.jakewharton.threetenabp.AndroidThreeTen
+import com.lreisdeandrade.marvelapp.util.Constants.CHARACTER_DATABASE
 import com.lreisdeandrade.marvellapp.BuildConfig
 import com.lreisdeandrade.marvelservice.LoggingInterceptor
 import com.lreisdeandrade.marvelservice.MarvelApiEndPoint
@@ -20,15 +21,10 @@ class AppContext : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        initDagger()
         initializeTimber()
         initializeTimezone()
         initializeApiModules()
         initializeRoom()
-    }
-
-    private fun initDagger() {
-//        DaggerInjector.initializeApplicationComponent(this);
     }
 
     private fun initializeTimber() {
@@ -47,7 +43,7 @@ class AppContext : Application() {
 
     private fun initializeRoom() {
         database = Room
-            .databaseBuilder(applicationContext, CharacterDataBase::class.java, "CharacterDataBase")
+            .databaseBuilder(applicationContext, CharacterDataBase::class.java, CHARACTER_DATABASE)
             .fallbackToDestructiveMigration()
             .build()
     }

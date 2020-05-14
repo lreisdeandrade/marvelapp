@@ -11,14 +11,14 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-internal const val PUBLIC_KEY = "8505a155c66a8d185240640ab157be41"
-internal const val PRIVATE_KEY = "9dda3d974c57ee4a40f7c75b0d6f395ec61cf9b9"
+internal const val PUBLIC_KEY = "YOUR-PUBLIC-KEY"
+internal const val PRIVATE_KEY = "YOUR-PRIVATE-KEY"
 internal const val TIME_STAMP_KEY = "ts"
 internal const val HASH_KEY = "hash"
 internal const val API_KEY = "apikey"
 internal const val LIMIT_KEY = "limit"
 
-const val ITEMS_PER_PAGE = 20
+const val ITEMS_PER_PAGE = 30
 
 object MarvellModule {
     lateinit var retrofit: Retrofit private set

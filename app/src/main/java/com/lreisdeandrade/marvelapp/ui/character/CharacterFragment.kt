@@ -12,7 +12,6 @@ import com.lreisdeandrade.marvelservice.model.Character
 import kotlinx.android.synthetic.main.fragment_home.*
 import android.view.*
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import com.google.android.material.snackbar.Snackbar
 import com.lreisdeandrade.marvelapp.ui.characterdetail.CharacterDetailActivity
@@ -20,11 +19,10 @@ import com.lreisdeandrade.marvelapp.util.ui.extension.showSnackBar
 import com.lreisdeandrade.marvelapp.util.ui.PaginationScrollListener
 import com.lreisdeandrade.marvellapp.R
 import com.lreisdeandrade.marvelservice.ITEMS_PER_PAGE
-import org.jetbrains.anko.sdk25.coroutines.onClick
 
-class HomeFragment : Fragment() {
+class CharacterFragment : Fragment() {
 
-    private lateinit var viewModel: HomeViewModel
+    private lateinit var viewModel: CharacterViewModel
 
     private var charactersList: ArrayList<Character>? = null
     private var characterAdapter: CharacterAdapter? = null
@@ -34,8 +32,8 @@ class HomeFragment : Fragment() {
     private var searchView: SearchView? = null
 
     companion object {
-        fun newInstance(): HomeFragment {
-            return HomeFragment()
+        fun newInstance(): CharacterFragment {
+            return CharacterFragment()
         }
     }
 
@@ -102,7 +100,7 @@ class HomeFragment : Fragment() {
 //    }
 
     private fun initViewModel() {
-        viewModel = obtainViewModel(AppContext.instance, HomeViewModel::class.java)
+        viewModel = obtainViewModel(AppContext.instance, CharacterViewModel::class.java)
 
         with(viewModel) {
             hasErrorLive.observe(viewLifecycleOwner, Observer {

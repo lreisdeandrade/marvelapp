@@ -9,7 +9,7 @@ import com.lreisdeandrade.marvelservice.model.Character
 import com.lreisdeandrade.marvelservice.model.CharacterResponse
 import timber.log.Timber
 
-internal class HomeViewModel(
+internal class CharacterViewModel(
     application: Application,
     private val characterDataSource: CharacterDataSource,
     private val scheduler: BaseSchedulerProvider

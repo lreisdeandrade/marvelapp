@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.res.Resources
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.lreisdeandrade.marvelapp.ui.character.HomeViewModel
+import com.lreisdeandrade.marvelapp.ui.character.CharacterViewModel
 import com.lreisdeandrade.marvelapp.util.scheduler.ImmediateSchedulerProvider
 import com.lreisdeandrade.marvellapp.features.util.DummyData
 import com.lreisdeandrade.marvellapp.features.util.parseObject
@@ -24,7 +24,7 @@ import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 import org.mockito.Mockito.`when`
 
-class HomeViewModelTest {
+class CharacterViewModelTest {
 
     // Executes each task synchronously using Architecture Components.
     @get:Rule
@@ -35,7 +35,7 @@ class HomeViewModelTest {
     @Mock
     private lateinit var characterRepository: CharacterRepository
 
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var characterViewModel: CharacterViewModel
     private lateinit var isLoadingLiveMock: Observer<Boolean>
     private lateinit var fetchCharacterLiveMock: Observer<CharacterResponse>
     private lateinit var isBottomLoadingLiveMock: Observer<Boolean>
@@ -53,7 +53,7 @@ class HomeViewModelTest {
         setupViewModelMocks()
         setupCharactersMock()
 
-        homeViewModel = HomeViewModel(context, characterRepository, ImmediateSchedulerProvider())
+        characterViewModel = CharacterViewModel(context, characterRepository, ImmediateSchedulerProvider())
     }
 
     private fun setupContext() {
@@ -77,7 +77,7 @@ class HomeViewModelTest {
 
     @Test
     fun `load characters with first offset with success`() {
-        with(homeViewModel) {
+        with(characterViewModel) {
             hasErrorLive.observeForever(hasErrorLiveMock)
             isBottomLoadingLive.observeForever(isBottomLoadingLiveMock)
             isLoadingLive.observeForever(isLoadingLiveMock)
@@ -104,7 +104,7 @@ class HomeViewModelTest {
 
     @Test
     fun `load characters without firts offset with success`() {
-        with(homeViewModel) {
+        with(characterViewModel) {
             isLoadingLive.observeForever(isLoadingLiveMock)
             isBottomLoadingLive.observeForever(isBottomLoadingLiveMock)
             fetchCharacterLive.observeForever(fetchCharacterLiveMock)
@@ -133,7 +133,7 @@ class HomeViewModelTest {
 
     @Test
     fun `load characters with first offset with error`() {
-        with(homeViewModel) {
+        with(characterViewModel) {
             hasErrorLive.observeForever(hasErrorLiveMock)
             isBottomLoadingLive.observeForever(isBottomLoadingLiveMock)
             isLoadingLive.observeForever(isLoadingLiveMock)
@@ -159,7 +159,7 @@ class HomeViewModelTest {
 
     @Test
     fun `load characters whitout first offset with error`() {
-        with(homeViewModel) {
+        with(characterViewModel) {
             hasErrorLive.observeForever(hasErrorLiveMock)
             isBottomLoadingLive.observeForever(isBottomLoadingLiveMock)
             isLoadingLive.observeForever(isLoadingLiveMock)
@@ -187,7 +187,7 @@ class HomeViewModelTest {
 
     @Test
     fun  `test filtered list with query`() {
-        with(homeViewModel) {
+        with(characterViewModel) {
             characterSearchLive.observeForever(characterSearchLiveMock)
 
             var originalList =  DummyData.arrayListCharacter()
@@ -212,7 +212,7 @@ class HomeViewModelTest {
 
     @Test
     fun  `test filtered list with empty query`() {
-        with(homeViewModel) {
+        with(characterViewModel) {
             characterSearchLive.observeForever(characterSearchLiveMock)
 
             var originalList =  DummyData.arrayListCharacter()

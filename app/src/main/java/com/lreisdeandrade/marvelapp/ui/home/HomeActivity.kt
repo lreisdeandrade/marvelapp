@@ -3,7 +3,7 @@ package com.lreisdeandrade.marvelapp.ui.home
 import android.os.Bundle
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
-import com.lreisdeandrade.marvelapp.ui.character.HomeFragment
+import com.lreisdeandrade.marvelapp.ui.character.CharacterFragment
 import com.lreisdeandrade.marvelapp.ui.favorite.FavoriteFragment
 import com.lreisdeandrade.marvellapp.R
 import com.lreisdeandrade.marvelapp.util.ui.extension.replaceFragmentInActivity
@@ -41,10 +41,10 @@ class HomeActivity : AppCompatActivity() {
     private fun openHomeFragment() {
         val homeId = CHARACTER_FRAMENT_ID
         currentSelectItemId = R.id.action_home
-        var fragment: HomeFragment? =
-            supportFragmentManager.findFragmentByTag(homeId) as HomeFragment?
+        var fragment: CharacterFragment? =
+            supportFragmentManager.findFragmentByTag(homeId) as CharacterFragment?
         if (fragment == null) {
-            fragment = HomeFragment.newInstance()
+            fragment = CharacterFragment.newInstance()
             replaceFragmentInActivity(fragment, R.id.contentFrame, homeId)
         }
     }

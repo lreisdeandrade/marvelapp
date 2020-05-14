@@ -16,6 +16,7 @@ internal const val PRIVATE_KEY = "YOUR-PRIVATE-kEY"
 internal const val TIME_STAMP_KEY = "ts"
 internal const val HASH_KEY = "hash"
 internal const val API_KEY = "apikey"
+internal const val LIMIT_KEY = "limit"
 
 const val ITEMS_PER_PAGE = 20
 
@@ -37,7 +38,7 @@ object MarvellModule {
                 .addQueryParameter(TIME_STAMP_KEY, timeStamp)
                 .addQueryParameter(API_KEY, PUBLIC_KEY)
                 .addQueryParameter(HASH_KEY, generateHash())
-                .addQueryParameter("limit", ITEMS_PER_PAGE.toString())
+                .addQueryParameter(LIMIT_KEY, ITEMS_PER_PAGE.toString())
                 .build()
 
             val requestBuilder = original.newBuilder().url(url)

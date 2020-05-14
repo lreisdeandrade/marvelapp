@@ -5,7 +5,7 @@ import com.lreisdeandrade.marvelservice.model.Thumbnail
 
 object DummyData {
 
-    const val VAlUE_STRING = "123456"
+    const val VAlUE_STRING = "1"
     const val VAlUE_INT = 0
 
     fun arrayListCharacter(): ArrayList<Character> = arrayListOf(getCharacter(),

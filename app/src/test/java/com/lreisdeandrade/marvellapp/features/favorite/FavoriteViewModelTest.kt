@@ -72,7 +72,7 @@ class FavoriteViewModelTest {
     }
 
     @Test
-    fun loadFavoriteList() {
+    fun `load Favorite characters with result`() {
 
         with(favoriteViewModel) {
             isLoadingLive.observeForever(isLoadingLiveMock)
@@ -96,7 +96,7 @@ class FavoriteViewModelTest {
     }
 
     @Test
-    fun loadFavoriteListEmpty() {
+    fun `load favorite characters with empty result`() {
         with(favoriteViewModel) {
             isLoadingLive.observeForever(isLoadingLiveMock)
             isEmptyListLive.observeForever(isFavoriteEmptyListLiveMock)

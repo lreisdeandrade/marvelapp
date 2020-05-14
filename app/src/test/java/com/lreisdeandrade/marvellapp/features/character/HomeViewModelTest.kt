@@ -13,8 +13,6 @@ import com.lreisdeandrade.marvelservice.character.CharacterRepository
 import com.lreisdeandrade.marvelservice.model.Character
 import com.lreisdeandrade.marvelservice.model.CharacterResponse
 import io.reactivex.Single
-import org.hamcrest.CoreMatchers.equalTo
-import org.junit.Assert.assertThat
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -78,7 +76,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun loadCharacterFirstOffsetWithSuccess() {
+    fun `load characters with first offset with success`() {
         with(homeViewModel) {
             hasErrorLive.observeForever(hasErrorLiveMock)
             isBottomLoadingLive.observeForever(isBottomLoadingLiveMock)
@@ -105,7 +103,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun loadCharactersWithSuccess() {
+    fun `load characters without firts offset with success`() {
         with(homeViewModel) {
             isLoadingLive.observeForever(isLoadingLiveMock)
             isBottomLoadingLive.observeForever(isBottomLoadingLiveMock)
@@ -134,7 +132,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun loadCharacterFirstOffsetWithError() {
+    fun `load characters with first offset with error`() {
         with(homeViewModel) {
             hasErrorLive.observeForever(hasErrorLiveMock)
             isBottomLoadingLive.observeForever(isBottomLoadingLiveMock)
@@ -160,7 +158,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun loadCharacterWithError() {
+    fun `load characters whitout first offset with error`() {
         with(homeViewModel) {
             hasErrorLive.observeForever(hasErrorLiveMock)
             isBottomLoadingLive.observeForever(isBottomLoadingLiveMock)
@@ -188,45 +186,52 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun  `test filtered list with match query`() {
+    fun  `test filtered list with query`() {
         with(homeViewModel) {
             characterSearchLive.observeForever(characterSearchLiveMock)
 
             var originalList =  DummyData.arrayListCharacter()
-            filterCharacter("s", originalList)
+            var query =  "s"
+            filterCharacter(query, originalList)
 
             val filteredList: ArrayList<Character> = ArrayList()
             originalList.let { character ->
                 character?.forEach {
-                    if (it.name.toLowerCase().contains("s".toLowerCase())) {
+                    if (it.name.toLowerCase().contains(query.toLowerCase())) {
                         filteredList.add(it)
                     }
                 }
             }
-            verify(characterSearchLiveMock).onChanged(filteredList)
-            assertTrue(filteredList.size > 0)
+
+            if(query.isNotEmpty()){
+                verify(characterSearchLiveMock).onChanged(filteredList)
+                assertTrue(filteredList.size > 0)
+            }
         }
     }
 
     @Test
-    fun  `test filtered list with no match query`() {
+    fun  `test filtered list with empty query`() {
         with(homeViewModel) {
             characterSearchLive.observeForever(characterSearchLiveMock)
 
             var originalList =  DummyData.arrayListCharacter()
-            filterCharacter("", originalList)
+            var query =  ""
+            filterCharacter(query, originalList)
 
             val filteredList: ArrayList<Character> = ArrayList()
             originalList.let { character ->
                 character?.forEach {
-                    if (it.name.toLowerCase().contains("b".toLowerCase())) {
+                    if (it.name.toLowerCase().contains(query.toLowerCase()) ) {
                         filteredList.add(it)
                     }
                 }
             }
-            verify(characterSearchLiveMock).onChanged(originalList)
-            verify(characterSearchLiveMock, never()).onChanged(filteredList)
-            assertTrue(filteredList.isEmpty())
+
+            if(query.isEmpty()){
+                verify(characterSearchLiveMock).onChanged(originalList)
+                assertTrue(originalList.isNotEmpty())
+            }
         }
     }
 }

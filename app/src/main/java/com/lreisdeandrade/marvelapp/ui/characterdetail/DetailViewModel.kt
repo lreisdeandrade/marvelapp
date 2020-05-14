@@ -15,15 +15,14 @@ internal class DetailViewModel(
     private val schedulerProvider: BaseSchedulerProvider
 ) : BaseViewModel(application) {
 
-    internal val checkFavorite: MutableLiveData<Boolean> = MutableLiveData()
-    internal val isFavorite: MutableLiveData<Boolean> = MutableLiveData()
+    internal val isFavoriteLive: MutableLiveData<Boolean> = MutableLiveData()
 
     fun saveFavoriteCharacter(character: Character) {
         Observable.just(0)
             .map { database.characterDao().insert(character) }
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
-            .subscribe({isFavorite.postValue(true) }, {
+            .subscribe({isFavoriteLive.postValue(true) }, {
                 Timber.e(it, "saveFavoriteCharacter: %s", it.message)
 //                view.saveFavoriteError()
             })
@@ -35,7 +34,7 @@ internal class DetailViewModel(
             .map {database.characterDao().delete(character) }
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
-            .subscribe({isFavorite.postValue(false) }, {
+            .subscribe({isFavoriteLive.postValue(false) }, {
                 Timber.e(it, "deleteFavoriteCharacter: %s", it.message)
 //                view.saveFavoriteError()
             })
@@ -46,7 +45,9 @@ internal class DetailViewModel(
             .map {database.characterDao().findById(characterId) != null }
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
-            .subscribe({checkFavorite.postValue(it) }, {
+            .subscribe({
+
+                isFavoriteLive.postValue(it) }, {
                 Timber.e(it, "checkFavoriteCharacter: %s", it.message)
 //                view.saveFavoriteError()
             })

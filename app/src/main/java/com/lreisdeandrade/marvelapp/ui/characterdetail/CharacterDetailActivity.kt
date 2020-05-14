@@ -90,12 +90,7 @@ class CharacterDetailActivity : AppCompatActivity() {
         viewModel = obtainViewModel(AppContext.instance, DetailViewModel::class.java)
 
         viewModel.apply {
-            checkFavorite.observe(this@CharacterDetailActivity, Observer {
-                it?.let {
-                    setupFavoriteButton(it)
-                }
-            })
-            isFavorite.observe(this@CharacterDetailActivity, Observer {
+            isFavoriteLive.observe(this@CharacterDetailActivity, Observer {
                 it?.let {
                     setupFavoriteButton(it)
                 }

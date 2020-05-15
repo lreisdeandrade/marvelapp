@@ -49,3 +49,14 @@ App is based on the [Google TODO MVVM pattern](https://github.com/googlesamples/
  # Tests locations
  - Unit tests under [test folder](https://github.com/lreisdeandrade/moviedb/tree/master/app/src/test).
 
+
+License
+==========
+
+Copyright (c) GibranLyra 2018
+
+GNU GENERAL PUBLIC LICENSE
+
+Version 3, 29 June 2007
+
+See LICENSE.md

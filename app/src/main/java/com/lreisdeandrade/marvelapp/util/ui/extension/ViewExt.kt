@@ -15,7 +15,7 @@ fun ImageView.loadUrl(url: String) {
         .load(url).into(this)
 }
 fun ImageView.loadGif() {
-    Glide.with(context).load(R.raw.marvel).into(this)
+    Glide.with(context).load(R.raw.marvel_intro).into(this)
 }
 
 

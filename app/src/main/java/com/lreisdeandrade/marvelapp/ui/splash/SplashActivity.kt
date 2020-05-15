@@ -10,7 +10,7 @@ import com.lreisdeandrade.marvellapp.R
 import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : AppCompatActivity() {
-    private val SPLASH_TIME_OUT = 4300L
+    private val SPLASH_TIME_OUT = 8200L
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)

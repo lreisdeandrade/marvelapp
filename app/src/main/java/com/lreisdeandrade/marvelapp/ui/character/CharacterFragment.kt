@@ -9,7 +9,7 @@ import com.lreisdeandrade.marvelapp.util.ui.extension.gone
 import com.lreisdeandrade.marvelapp.util.ui.extension.obtainViewModel
 import com.lreisdeandrade.marvelapp.util.ui.extension.visible
 import com.lreisdeandrade.marvelservice.model.Character
-import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_character.*
 import android.view.*
 import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
@@ -42,7 +42,7 @@ class CharacterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        return inflater.inflate(R.layout.fragment_character, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -118,9 +118,9 @@ class CharacterFragment : Fragment() {
             {
                 it?.let {
                     if (it) {
-                        homeFragmentLoading.visible()
+                        characterFragmentLoading.visible()
                     } else {
-                        homeFragmentLoading.gone()
+                        characterFragmentLoading.gone()
                     }
                 }
             })
@@ -128,9 +128,9 @@ class CharacterFragment : Fragment() {
             {
                 it?.let {
                     if (it) {
-                        homeBottomLoading.visible()
+                        characterBottomLoading.visible()
                     } else {
-                        homeBottomLoading.gone()
+                        characterBottomLoading.gone()
                     }
                 }
             })

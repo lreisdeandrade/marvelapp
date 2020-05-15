@@ -53,7 +53,7 @@ App is based on the [Google TODO MVVM pattern](https://github.com/googlesamples/
 License
 ==========
 
-Copyright (c) GibranLyra 2018
+Copyright (c) Lreisdeandrade 2020
 
 GNU GENERAL PUBLIC LICENSE
 

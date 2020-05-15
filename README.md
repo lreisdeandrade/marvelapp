@@ -45,8 +45,8 @@ App is based on the [Google TODO MVVM pattern](https://github.com/googlesamples/
 ### Contribution
 - Suggestions ,ideas, Pulls and issues are very welcomed.
 
-### SETUP
-- Get a key pair in [Marvel Developer](https://developer.marvel.com/) and add in file MarvellModule.kt constants.
+### Project Set-up
+- Get a key pair in site [Marvel Developer](https://developer.marvel.com/) and add in respective constants located on MarvellModule.kt file.
 
 
 

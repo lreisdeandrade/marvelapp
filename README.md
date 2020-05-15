@@ -23,7 +23,6 @@ App is based on the [Google TODO MVVM pattern](https://github.com/googlesamples/
 
 
 
-
 ## Used Libraries
 - [Retrofit](http://square.github.io/retrofit)
 - [RxJava2](https://github.com/ReactiveX/RxJava)
@@ -33,7 +32,7 @@ App is based on the [Google TODO MVVM pattern](https://github.com/googlesamples/
 - JUnit
 - [Espresso](https://developer.android.com/training/testing/espresso/index.html)
 
-
+ 
 ## Some Notes
 
 - I created a separated module exclusively to demonstrate a way to let the service be tottaly decoupled from the app. That helps when the service is the same in multiple front ends.
@@ -44,10 +43,11 @@ App is based on the [Google TODO MVVM pattern](https://github.com/googlesamples/
 - [LinkedIn](https://www.linkedin.com/in/leandro-reis-de-andrade-643080a3/)
 
 ### Contribution
-- Suggestions ,ideas, Pulls and issues are very welcomed
+- Suggestions ,ideas, Pulls and issues are very welcomed.
 
- # Tests locations
- - Unit tests under [test folder](https://github.com/lreisdeandrade/moviedb/tree/master/app/src/test).
+### SETUP
+- Get a key pair in [Marvel Developer](https://developer.marvel.com/) and add in file MarvellModule.kt constants.
+
 
 
 License
